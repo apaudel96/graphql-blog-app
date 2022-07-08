@@ -4,16 +4,17 @@ from secrets import token_urlsafe
 
 from tortoise.models import Model
 import tortoise.fields as f
+from app.blog import schema
 
 
-class Image(Model):
+class Image(Model, schema.ImageType):
     @staticmethod
     def create_edit_time():
         return (datetime.utcnow() + timedelta(minutes=10)).replace(tzinfo=None)
 
-    name = f.CharField(255)
+    name = f.CharField(255, null=True)
     token = f.CharField(255, default=lambda: token_urlsafe()[:12])
-    edit_by = f.DatetimeField(default=lambda: datetime.utcnow() + timedelta(minutes=10))
+    edit_by = f.DatetimeField(default=create_edit_time)
     image = f.BinaryField(null=True)
     post: f.OneToOneRelation[Post]
 
@@ -22,7 +23,7 @@ class Image(Model):
         return datetime.utcnow() < self.edit_by
 
 
-class Post(Model):
+class Post(Model, schema.PostType):
     title = f.CharField(255)
     content = f.TextField()
     added_on = f.DatetimeField(auto_now_add=True)
@@ -37,7 +38,7 @@ class Post(Model):
     comments: f.ForeignKeyRelation[Comment]
 
 
-class Comment(Model):
+class Comment(Model, schema.CommentType):
     content = f.TextField()
     added_on = f.DatetimeField(auto_now_add=True)
     edited_on = f.DatetimeField(auto_now=True)
@@ -50,7 +51,7 @@ class Comment(Model):
     replies = f.ForeignKeyRelation["Reply"]
 
 
-class Reply(Model):
+class Reply(Model, schema.ReplyType):
     content = f.TextField()
     added_on = f.DatetimeField(auto_now_add=True)
     edited_on = f.DatetimeField(auto_now=True)
