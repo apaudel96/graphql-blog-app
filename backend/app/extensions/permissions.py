@@ -18,6 +18,7 @@ def _get_token_from_headers(info: Info) -> Token | None:
             if scheme.lower() == "token":
                 token = await Token.get_or_none(token=cred)
                 if token and not token.expired:
+                    info.context["user"] = await token.user
                     return token
             return None
         except ValueError:

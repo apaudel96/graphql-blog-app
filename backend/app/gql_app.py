@@ -1,16 +1,16 @@
 from strawberry.asgi import GraphQL
 import strawberry
 from app.account.gql import AccountQuery, AccountMutation
+from app.blog.gql import BlogQuery, BlogMutation
 
 
 @strawberry.type
-class Query(AccountQuery):
-    # hello: str = strawberry.field(resolver=lambda: "world")
+class Query(AccountQuery, BlogQuery):
     pass
 
 
 @strawberry.type
-class Mutation(AccountMutation):
+class Mutation(AccountMutation, BlogMutation):
     pass
 
 

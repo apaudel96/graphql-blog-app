@@ -4,9 +4,9 @@ from secrets import token_urlsafe
 from uuid import uuid4
 
 from tortoise.models import Model
-from tortoise.queryset import QuerySet
 import tortoise.fields as f
 from app.account.schema import UserType, TokenType
+from app.blog.models import Post, Comment, Reply
 
 
 class User(Model, UserType):
@@ -14,7 +14,10 @@ class User(Model, UserType):
     password_hash = f.CharField(255)
     # auto generated
     verified = f.BooleanField(default=False)
-    tokens: QuerySet[Token]
+    tokens: f.ReverseRelation[Token]
+    posts: f.ReverseRelation[Post]
+    comments: f.ReverseRelation[Comment]
+    replies: f.ReverseRelation[Reply]
 
 
 class Token(Model, TokenType):
