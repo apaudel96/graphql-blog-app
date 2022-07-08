@@ -16,6 +16,7 @@ class LoginErrorType:
 
 @type
 class UserType:
+    id: int
     email: str
     verified: bool
 

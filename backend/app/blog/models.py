@@ -10,17 +10,21 @@ from app.blog import schema
 class Image(Model, schema.ImageType):
     @staticmethod
     def create_edit_time():
-        return (datetime.utcnow() + timedelta(minutes=10)).replace(tzinfo=None)
+        return datetime.utcnow() + timedelta(minutes=10)
+
+    @staticmethod
+    def create_token():
+        return token_urlsafe()[:12]
 
     name = f.CharField(255, null=True)
-    token = f.CharField(255, default=lambda: token_urlsafe()[:12])
+    token = f.CharField(255, default=create_token)
     edit_by = f.DatetimeField(default=create_edit_time)
     image = f.BinaryField(null=True)
     post: f.OneToOneRelation[Post]
 
     @property
     def can_edit(self):
-        return datetime.utcnow() < self.edit_by
+        return datetime.utcnow() < self.edit_by.replace(tzinfo=None)
 
 
 class Post(Model, schema.PostType):

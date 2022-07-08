@@ -9,7 +9,7 @@ from starlette.requests import HTTPConnection
 from app.account.models import Token
 
 
-def _get_token_from_headers(info: Info) -> Token | None:
+async def _get_token_from_headers(info: Info) -> Token | None:
     conn: HTTPConnection = info.context["request"]
 
     if "Authorization" in conn.headers:
@@ -31,7 +31,7 @@ class IsAuthenticated(BasePermission):
     async def has_permission(
         self, source: Any, info: Info, **kwargs
     ) -> Union[bool, Awaitable[bool]]:
-        token = _get_token_from_headers(info)
+        token = await _get_token_from_headers(info)
         if token:
             return True
         return False

@@ -12,7 +12,7 @@ from app.account.schema import UserType
 @strawberry.type
 class ImageType:
     id: int
-    name: str
+    name: Optional[str]
     token: str
     can_edit: bool
     post: PostType
@@ -78,4 +78,9 @@ class UpdatePostInput:
 
 @strawberry.input
 class DeletePostInput:
+    id: int
+
+
+@strawberry.input
+class EditImageInput:
     id: int
