@@ -6,7 +6,7 @@ from uuid import uuid4
 from tortoise.models import Model
 import tortoise.fields as f
 from app.account.schema import UserType, TokenType
-from app.blog.models import Post, Comment, Reply
+from app.blog.models import Post, Comment
 
 
 class User(Model, UserType):
@@ -17,7 +17,10 @@ class User(Model, UserType):
     tokens: f.ReverseRelation[Token]
     posts: f.ReverseRelation[Post]
     comments: f.ReverseRelation[Comment]
-    replies: f.ReverseRelation[Reply]
+    # replies: f.ReverseRelation[Reply]
+
+    def __str__(self):
+        return self.email
 
 
 class Token(Model, TokenType):

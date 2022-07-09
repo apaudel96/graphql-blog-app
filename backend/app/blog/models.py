@@ -43,7 +43,7 @@ class Post(Model, schema.PostType):
 
 
 class Comment(Model, schema.CommentType):
-    content = f.TextField()
+    content = f.TextField(null=True)
     added_on = f.DatetimeField(auto_now_add=True)
     edited_on = f.DatetimeField(auto_now=True)
     post = f.ForeignKeyField(
@@ -52,16 +52,17 @@ class Comment(Model, schema.CommentType):
     author = f.ForeignKeyField(
         "models.User", related_name="comments", on_delete="SET NULL", null=True
     )
-    replies = f.ForeignKeyRelation["Reply"]
+    parent = f.ForeignKeyField("models.Comment", null=True, related_name="replies")
+    replies = f.ForeignKeyRelation["Comment"]
 
 
-class Reply(Model, schema.ReplyType):
-    content = f.TextField()
-    added_on = f.DatetimeField(auto_now_add=True)
-    edited_on = f.DatetimeField(auto_now=True)
-    comment = f.ForeignKeyField(
-        "models.Post", related_name="replies", on_delete="CASCADE"
-    )
-    author = f.ForeignKeyField(
-        "models.User", related_name="replies", on_delete="SET NULL", null=True
-    )
+# class Reply(Model, schema.ReplyType):
+#     content = f.TextField()
+#     added_on = f.DatetimeField(auto_now_add=True)
+#     edited_on = f.DatetimeField(auto_now=True)
+#     comment = f.ForeignKeyField(
+#         "models.Post", related_name="replies", on_delete="CASCADE"
+#     )
+#     author = f.ForeignKeyField(
+#         "models.User", related_name="replies", on_delete="SET NULL", null=True
+#     )

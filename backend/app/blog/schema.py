@@ -33,22 +33,23 @@ class PostType:
 @strawberry.type
 class CommentType:
     id: int
-    content: str
+    content: Optional[str]
     added_on: datetime
     edited_on: datetime
     post: PostType
-    author: UserType
-    replies: list[ReplyType]
+    author: Optional[UserType]
+    replies: list[CommentType]
 
 
-@strawberry.type
-class ReplyType:
-    id: int
-    content: str
-    added_on: datetime
-    edited_on: datetime
-    comment: PostType
-    author: UserType
+#
+# @strawberry.type
+# class ReplyType:
+#     id: int
+#     content: str
+#     added_on: datetime
+#     edited_on: datetime
+#     comment: PostType
+#     author: UserType
 
 
 # Inputs
@@ -83,4 +84,27 @@ class DeletePostInput:
 
 @strawberry.input
 class EditImageInput:
+    id: int
+
+
+@strawberry.input()
+class ListCommentInput:
+    post_id: int
+
+
+@strawberry.input()
+class CreateCommentInput:
+    content: str
+    post_id: int
+    parent_id: Optional[int]
+
+
+@strawberry.input()
+class UpdateCommentInput:
+    id: int
+    content: str
+
+
+@strawberry.input()
+class DeleteCommentInput:
     id: int
