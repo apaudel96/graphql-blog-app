@@ -4,7 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [scripts]
-debug = "uvicorn app.app:app --reload"
+dev = "uvicorn app.app:app --reload"
+server = "uvicorn app.app:app"
 
 [packages]
 starlette = "*"
