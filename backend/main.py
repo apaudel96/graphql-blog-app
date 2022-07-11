@@ -4,5 +4,7 @@ from app.app import app
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, port=os.getenv("PORT", 8000))
+    port = os.getenv("PORT", "8000")
+    port = int(port)
+    uvicorn.run(app, port=port)
     
